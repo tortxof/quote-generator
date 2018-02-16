@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1>Sign Up</h1>
+{% include 'form_errors.html' %}
+<form action="{{ url_for('signup') }}" method="post">
+  {{ form.hidden_tag() }}
+  <div>
+    {{ form.email.label }}
+    {{ form.email }}
+  </div>
+  <div>
+    {{ form.password.label }}
+    {{ form.password }}
+  </div>
+  <button type="submit">Sign Up</button>
+</form>
+{% endblock %}

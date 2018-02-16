@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% include 'form_errors.html' %}
+<form action="{{ url_for('quotes') }}" method="post">
+  {{ form.hidden_tag() }}
+  <div>
+    {{ form.content.label }}
+    {{ form.content }}
+  </div>
+  <div>
+    {{ form.author.label }}
+    {{ form.author }}
+  </div>
+  <button type="submit">Add Quote</button>
+</form>
+<div class="quotes">
+  {% for quote in quotes %}
+  <div class="quote">
+    <div class="content">{{ quote.content }}</div>
+    <div class="author">{{ quote.author }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

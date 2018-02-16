@@ -1,0 +1,7 @@
+{% if form.errors %}
+  {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+    {% for error in field_errors %}
+      <div>{{ form[field_name].label }}: {{ error }}</div>
+    {% endfor %}
+  {% endfor %}
+{% endif %}

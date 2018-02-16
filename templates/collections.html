@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% include 'form_errors.html' %}
+<form action="{{ url_for('collections') }}" method="post">
+  {{ form.hidden_tag() }}
+  <div>
+    {{ form.name.label }}
+    {{ form.name }}
+  </div>
+  <button type="submit">Add Quote</button>
+</form>
+<div class="collections">
+  {% for collection in collections %}
+  <div class="collection">{{ collection.name }}</div>
+  {% endfor %}
+</div>
+{% endblock %}
