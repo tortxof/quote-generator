@@ -24,3 +24,28 @@ nav a {
   text-decoration: none;
   padding: 0.5rem 0.3rem;
 }
+
+.container > h1 {
+  text-align: center;
+}
+
+form > div {
+  display: flex;
+  flex-direction: row;
+  margin: 0.5rem 1rem;
+}
+
+form > div > label {
+  margin-right: 0.5rem;
+}
+
+form > div > input,
+form > div > textarea,
+form > div > select {
+  flex-grow: 1;
+}
+
+form button {
+  display: block;
+  margin: 1em auto;
+}
