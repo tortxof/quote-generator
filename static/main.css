@@ -25,6 +25,11 @@ nav a {
   padding: 0.5rem 0.3rem;
 }
 
+.container {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
 .container > h1 {
   text-align: center;
 }
