@@ -16,7 +16,7 @@
 <div class="quotes">
   {% for quote in quotes %}
   <div class="quote">
-    <div class="content">{{ quote.content }}</div>
+    <div class="content"><a href="{{ url_for('quote', quote_id=quote.id) }}">{{ quote.content }}</a></div>
     <div class="author">{{ quote.author }}</div>
   </div>
   {% endfor %}

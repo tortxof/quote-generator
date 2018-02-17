@@ -18,7 +18,13 @@ from flask_login import (
 )
 
 from models import db, User, Quote, Collection, QuoteCollection, IntegrityError
-from forms import SignupForm, LoginForm, QuoteAddForm, CollectionAddForm
+from forms import (
+    SignupForm,
+    LoginForm,
+    QuoteAddForm,
+    QuoteEditForm,
+    CollectionAddForm,
+)
 
 app = Flask(__name__)
 
@@ -106,6 +112,34 @@ def quotes():
     else:
         quotes = Quote.select().where(Quote.user == current_user.get_id())
         return render_template('quotes.html', form=form, quotes=quotes)
+
+@app.route('/quotes/<quote_id>', methods=['GET', 'POST'])
+@login_required
+def quote(quote_id):
+    try:
+        quote = Quote.get(
+            Quote.id == quote_id,
+            Quote.user == current_user.get_id(),
+        )
+    except Quote.DoesNotExist:
+        flash('Quote not found')
+        return redirect(url_for('quotes'))
+    form = QuoteEditForm(obj=quote)
+    if form.validate_on_submit():
+        if form.id.data != quote_id:
+            flash('Quote ID mismatch!')
+            return redirect(url_for('quotes'))
+        if form.form_delete.data:
+            quote.delete_instance(recursive=True)
+            flash('Quote deleted.')
+            return redirect(url_for('quotes'))
+        quote.content = form.content.data
+        quote.author = form.author.data
+        quote.save()
+        flash('Quote updated.')
+        return redirect(url_for('quotes'))
+    else:
+        return render_template('quote.html', form=form)
 
 @app.route('/collections', methods=['GET', 'POST'])
 @login_required

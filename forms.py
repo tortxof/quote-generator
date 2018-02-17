@@ -1,5 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField
+from wtforms import (
+    StringField,
+    PasswordField,
+    TextAreaField,
+    HiddenField,
+    BooleanField,
+)
 from wtforms.validators import InputRequired, Email, Length
 
 class SignupForm(FlaskForm):
@@ -25,6 +31,10 @@ class LoginForm(FlaskForm):
 class QuoteAddForm(FlaskForm):
     content = TextAreaField('Quote', [InputRequired(), Length(max=4096)])
     author = StringField('Author', [Length(max=255)])
+
+class QuoteEditForm(QuoteAddForm):
+    id = HiddenField()
+    form_delete = BooleanField('Delete', default=False)
 
 class CollectionAddForm(FlaskForm):
     name = StringField('Name', [InputRequired(), Length(max=255)])
