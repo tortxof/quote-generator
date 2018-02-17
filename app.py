@@ -253,7 +253,11 @@ def collection(collection_name):
 def collection_json(collection_name):
     collection = Collection.get(Collection.name == collection_name)
     return jsonify({'quotes': list(
-        Quote.select().join(QuoteCollection).where(
+        Quote.select(
+            Quote.content,
+            Quote.author,
+            Quote.id,
+        ).join(QuoteCollection).where(
             QuoteCollection.collection == collection,
         ).dicts()
     )})
@@ -266,4 +270,13 @@ def collection_random_json(collection_name):
             QuoteCollection.collection == collection,
         ).order_by(fn.Random()).limit(1)[0],
         recurse = False,
+        exclude = [Quote.user],
     ))
+
+@app.route('/api/quote/<quote_id>')
+def quote_json(quote_id):
+    try:
+        quote = Quote.get(Quote.id == quote_id)
+    except Quote.DoesNotExist:
+        return jsonify({'message': 'Quote not found.'}), 404
+    return jsonify(model_to_dict(quote, recurse=False, exclude=[Quote.user]))
