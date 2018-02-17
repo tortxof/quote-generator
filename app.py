@@ -7,6 +7,7 @@ from flask import (
     url_for,
     request,
     flash,
+    jsonify,
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import (
@@ -238,3 +239,12 @@ def collection(collection_name):
             form = form,
             collection_name = collection_name,
         )
+
+@app.route('/api/collection/<collection_name>')
+def collection_json(collection_name):
+    collection = Collection.get(Collection.name == collection_name)
+    return jsonify({'quotes': list(
+        Quote.select().join(QuoteCollection).where(
+            QuoteCollection.collection == collection,
+        ).dicts()
+    )})
