@@ -6,7 +6,7 @@ from wtforms import (
     HiddenField,
     BooleanField,
 )
-from wtforms.validators import InputRequired, Email, Length
+from wtforms.validators import InputRequired, Email, Length, Regexp
 
 class SignupForm(FlaskForm):
     email = StringField(
@@ -37,4 +37,14 @@ class QuoteEditForm(QuoteAddForm):
     form_delete = BooleanField('Delete', default=False)
 
 class CollectionAddForm(FlaskForm):
-    name = StringField('Name', [InputRequired(), Length(max=255)])
+    name = StringField(
+        'Name',
+        [
+            InputRequired(),
+            Length(min=1, max=255),
+            Regexp(
+                '^[a-zA-Z0-9_-]*$',
+                message = 'Allowed characters: A-Z a-z 0-9 _ -',
+            ),
+        ],
+    )
