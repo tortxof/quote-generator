@@ -12,6 +12,7 @@ flask-wtf = "*"
 flask-login = "*"
 peewee = "*"
 "psycopg2-binary" = "*"
+zappa = "*"
 
 
 [dev-packages]
