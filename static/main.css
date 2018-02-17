@@ -49,3 +49,18 @@ form button {
   display: block;
   margin: 1em auto;
 }
+
+.quote,
+.collection {
+  margin: 1rem;
+}
+
+.quote .author {
+  text-align: right;
+  color: #555;
+}
+
+.quote a,
+.collection a {
+  color: black;
+}
