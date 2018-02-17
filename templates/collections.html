@@ -5,7 +5,7 @@
   {{ form.hidden_tag() }}
   <div>
     {{ form.name.label }}
-    {{ form.name }}
+    {{ form.name(autofocus=True) }}
   </div>
   <button type="submit">Add Collection</button>
 </form>

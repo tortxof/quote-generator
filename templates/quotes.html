@@ -5,7 +5,7 @@
   {{ form.hidden_tag() }}
   <div>
     {{ form.content.label }}
-    {{ form.content }}
+    {{ form.content(autofocus=True) }}
   </div>
   <div>
     {{ form.author.label }}

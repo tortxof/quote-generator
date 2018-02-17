@@ -6,7 +6,7 @@
   {{ form.hidden_tag() }}
   <div>
     {{ form.email.label }}
-    {{ form.email }}
+    {{ form.email(autofocus=True) }}
   </div>
   <div>
     {{ form.password.label }}
