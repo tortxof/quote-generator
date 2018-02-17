@@ -18,7 +18,16 @@ from flask_login import (
     login_required,
 )
 
-from models import db, User, Quote, Collection, QuoteCollection, IntegrityError
+from models import (
+    db,
+    User,
+    Quote,
+    Collection,
+    QuoteCollection,
+    IntegrityError,
+    fn,
+)
+from playhouse.shortcuts import model_to_dict
 from forms import (
     SignupForm,
     LoginForm,
@@ -248,3 +257,13 @@ def collection_json(collection_name):
             QuoteCollection.collection == collection,
         ).dicts()
     )})
+
+@app.route('/api/collection/<collection_name>/random')
+def collection_random_json(collection_name):
+    collection = Collection.get(Collection.name == collection_name)
+    return jsonify(model_to_dict(
+        Quote.select().join(QuoteCollection).where(
+            QuoteCollection.collection == collection,
+        ).order_by(fn.Random()).limit(1)[0],
+        recurse = False,
+    ))
