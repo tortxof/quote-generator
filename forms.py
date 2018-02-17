@@ -48,3 +48,6 @@ class CollectionAddForm(FlaskForm):
             ),
         ],
     )
+
+class CollectionEditForm(CollectionAddForm):
+    form_delete = BooleanField('Delete', default=False)

@@ -24,6 +24,7 @@ from forms import (
     QuoteAddForm,
     QuoteEditForm,
     CollectionAddForm,
+    CollectionEditForm,
 )
 
 app = Flask(__name__)
@@ -163,4 +164,36 @@ def collections():
             'collections.html',
             form=form,
             collections=collections,
+        )
+
+@app.route('/collection/<collection_name>', methods=['GET', 'POST'])
+@login_required
+def collection(collection_name):
+    try:
+        collection = Collection.get(
+            Collection.name == collection_name,
+            Collection.user == current_user.get_id(),
+        )
+    except Collection.DoesNotExist:
+        flash('Collection not found')
+        return redirect(url_for('collections'))
+    form = CollectionEditForm(obj=collection)
+    if form.validate_on_submit():
+        if form.form_delete.data:
+            collection.delete_instance(recursive=True)
+            flash('Collection deleted.')
+            return redirect(url_for('collections'))
+        collection.name = form.name.data
+        try:
+            collection.save()
+        except IntegrityError:
+            flash('A collection with that name already exists.')
+            return redirect(url_for('collections'))
+        flash('Collection updated.')
+        return redirect(url_for('collections'))
+    else:
+        return render_template(
+            'collection.html',
+            form = form,
+            collection_name = collection_name,
         )

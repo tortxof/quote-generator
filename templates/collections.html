@@ -11,7 +11,9 @@
 </form>
 <div class="collections">
   {% for collection in collections %}
-  <div class="collection">{{ collection.name }}</div>
+  <div class="collection">
+    <a href="{{ url_for('collection', collection_name=collection.name) }}">{{ collection.name }}</a>
+  </div>
   {% endfor %}
 </div>
 {% endblock %}

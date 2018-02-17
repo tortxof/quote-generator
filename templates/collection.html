@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% include 'form_errors.html' %}
+<form action="{{ url_for('collection', collection_name=collection_name) }}" method="post">
+  {{ form.hidden_tag() }}
+  <div>
+    {{ form.name.label }}
+    {{ form.name }}
+  </div>
+  <div>
+    {{ form.form_delete.label }}
+    {{ form.form_delete }}
+  </div>
+  <button type="submit">Save Changes</button>
+</form>
+{% endblock %}
