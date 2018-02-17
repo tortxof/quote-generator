@@ -5,6 +5,7 @@ from wtforms import (
     TextAreaField,
     HiddenField,
     BooleanField,
+    SelectMultipleField,
 )
 from wtforms.validators import InputRequired, Email, Length, Regexp
 
@@ -31,6 +32,7 @@ class LoginForm(FlaskForm):
 class QuoteAddForm(FlaskForm):
     content = TextAreaField('Quote', [InputRequired(), Length(max=4096)])
     author = StringField('Author', [Length(max=255)])
+    collections = SelectMultipleField('Collections', coerce=str)
 
 class QuoteEditForm(QuoteAddForm):
     id = HiddenField()

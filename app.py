@@ -102,13 +102,28 @@ def logout():
 @login_required
 def quotes():
     form = QuoteAddForm()
+    form.collections.choices = [
+        (collection.name, collection.name)
+        for collection in Collection.select().where(
+            Collection.user == current_user.get_id()
+        )
+    ]
     if form.validate_on_submit():
         with db.atomic() as txn:
-            Quote.create(
+            quote = Quote.create(
                 content = form.content.data,
                 author = form.author.data,
                 user = current_user.get_id(),
             )
+            for collection_name in form.collections.data:
+                collection = Collection.get(
+                    Collection.name == collection_name,
+                    Collection.user == current_user.get_id(),
+                )
+                QuoteCollection.create(
+                    quote = quote,
+                    collection = collection,
+                )
         return redirect(url_for('quotes'))
     else:
         quotes = Quote.select().where(Quote.user == current_user.get_id())
