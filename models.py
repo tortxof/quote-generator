@@ -4,7 +4,7 @@ import secrets
 from peewee import *
 
 def gen_id():
-    return secrets.token_urlsafe(24)
+    return secrets.token_urlsafe(8)
 
 db = PostgresqlDatabase(
     os.environ.get('PG_NAME', 'quote_generator'),
