@@ -140,7 +140,20 @@ def quote(quote_id):
     except Quote.DoesNotExist:
         flash('Quote not found')
         return redirect(url_for('quotes'))
+    quote_collections = [
+        collection.name
+        for collection in Collection.select().join(QuoteCollection).where(
+            QuoteCollection.quote == quote,
+        )
+    ]
+    quote.collections = quote_collections
     form = QuoteEditForm(obj=quote)
+    form.collections.choices = [
+        (collection.name, collection.name)
+        for collection in Collection.select().where(
+            Collection.user == current_user.get_id()
+        )
+    ]
     if form.validate_on_submit():
         if form.id.data != quote_id:
             flash('Quote ID mismatch!')
@@ -152,6 +165,19 @@ def quote(quote_id):
         quote.content = form.content.data
         quote.author = form.author.data
         quote.save()
+        if set(quote_collections) != set(form.collections.data):
+            flash('Collections updated.')
+            QuoteCollection.delete().where(
+                QuoteCollection.quote == quote,
+            ).execute()
+            with db.atomic() as txn:
+                for collection_name in form.collections.data:
+                    QuoteCollection.create(
+                        quote = quote,
+                        collection = Collection.get(
+                            Collection.name == collection_name,
+                        ),
+                    )
         flash('Quote updated.')
         return redirect(url_for('quotes'))
     else:
