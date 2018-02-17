@@ -61,7 +61,7 @@ def signup():
                 )
             except IntegrityError:
                 flash('An account with that email already exists.')
-        return redirect(url_for('signup'))
+                return redirect(url_for('signup'))
         flash('Account created.')
         return redirect(url_for('login'))
     else:
