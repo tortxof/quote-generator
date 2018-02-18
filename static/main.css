@@ -34,6 +34,17 @@ nav a {
   text-align: center;
 }
 
+.small {
+  font-size: 0.8em;
+}
+
+footer {
+  background-color: #ccc;
+  overflow-y: hidden;
+  padding: 0 1rem;
+  margin-top: 4rem;
+}
+
 form > div {
   display: flex;
   flex-direction: row;

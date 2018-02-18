@@ -42,6 +42,7 @@ from forms import (
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'DEBUGSECRETKEY'
+app.config['APP_URL'] = os.environ.get('APP_URL')
 app.config['FLASKS3_CDN_DOMAIN'] = os.environ.get('FLASKS3_CDN_DOMAIN')
 app.config['FLASKS3_BUCKET_NAME'] = os.environ.get('FLASKS3_BUCKET_NAME')
 app.config['FLASKS3_HEADERS'] = {'Cache-Control': 'max-age=31536000'}

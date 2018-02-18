@@ -1,4 +1,51 @@
 {% extends 'layout.html' %}
 {% block content %}
 <h1>Quote Generator</h1>
+
+<p>
+Use your own quotes to create a custom quote API. Create a collection, then add
+quotes to that collection. You can then use the random endpoint to power your
+own quote machine.
+</p>
+
+<p>
+Built by <a href="https://portfolio.djones.co/">Daniel Jones</a> for
+freeCodeCamp students.
+</p>
+
+<h2>API</h2>
+
+<h3>Get all quotes in a collection.</h3>
+
+<code>{{ config.APP_URL }}/api/collection/&lt;collection_name&gt;</code>
+
+<h3>Get a random quote from a collection.</h3>
+
+<code>{{ config.APP_URL }}/api/collection/&lt;collection_name&gt;/random</code>
+
+<h3>Get a single quote by it's ID.</h3>
+
+<code>{{ config.APP_URL }}/api/quote/&lt;quote_id&gt;</code>
+
+<footer>
+  <p class="small">
+    Copyright &copy; 2018 by Daniel Jones
+  </p>
+
+  <p class="small">
+    Permission to use, copy, modify, and/or distribute this software for any purpose
+    with or without fee is hereby granted, provided that the above copyright notice
+    and this permission notice appear in all copies.
+  </p>
+
+  <p class="small">
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+    FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+    OF USE, DATA, OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE, OR OTHER
+    TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+    THIS SOFTWARE.
+  </p>
+</footer>
 {% endblock %}
