@@ -38,6 +38,13 @@ nav a {
   font-size: 0.8em;
 }
 
+code {
+  display: block;
+  background-color: #ddd;
+  padding: 0.5rem;
+  overflow-x: scroll;
+}
+
 footer {
   background-color: #ccc;
   overflow-y: hidden;
