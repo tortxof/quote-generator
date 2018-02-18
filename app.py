@@ -80,6 +80,8 @@ def _db_close(exc):
     if not db.is_closed():
         db.close()
 
+cors_header = {'Access-Control-Allow-Origin': '*'}
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -278,7 +280,7 @@ def collection_json(collection_name):
         ).join(QuoteCollection).where(
             QuoteCollection.collection == collection,
         ).dicts()
-    )})
+    )}), cors_header
 
 @app.route('/api/collection/<collection_name>/random')
 def collection_random_json(collection_name):
@@ -289,7 +291,7 @@ def collection_random_json(collection_name):
         ).order_by(fn.Random()).limit(1)[0],
         recurse = False,
         exclude = [Quote.user],
-    ))
+    )), cors_header
 
 @app.route('/api/quote/<quote_id>')
 def quote_json(quote_id):
@@ -297,4 +299,8 @@ def quote_json(quote_id):
         quote = Quote.get(Quote.id == quote_id)
     except Quote.DoesNotExist:
         return jsonify({'message': 'Quote not found.'}), 404
-    return jsonify(model_to_dict(quote, recurse=False, exclude=[Quote.user]))
+    return jsonify(model_to_dict(
+        quote,
+        recurse=False,
+        exclude=[Quote.user],
+    )), cors_header
