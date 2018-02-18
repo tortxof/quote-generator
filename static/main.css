@@ -43,6 +43,7 @@ code {
   display: block;
   background-color: #ddd;
   padding: 0.5rem;
+  white-space: nowrap;
   overflow-x: scroll;
 }
 
