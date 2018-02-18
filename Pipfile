@@ -13,6 +13,8 @@ flask-login = "*"
 peewee = "*"
 "psycopg2-binary" = "*"
 zappa = "*"
+flask-assets = "*"
+"flask-s3" = "*"
 
 
 [dev-packages]

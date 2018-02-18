@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "28b0a13ffbfd6670c0e591e40ae34ad46df3dc8c2dd02357157d1118b9b22eb7"
+            "sha256": "41be8237baf5578dc07a5ce204a9dada8e28d20117dbcec74a24596193cb0322"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -103,11 +103,25 @@
             ],
             "version": "==0.12.2"
         },
+        "flask-assets": {
+            "hashes": [
+                "sha256:6031527b89fb3509d1581d932affa5a79dd348cfffb58d0aef99a43461d47847"
+            ],
+            "version": "==0.12"
+        },
         "flask-login": {
             "hashes": [
                 "sha256:c815c1ac7b3e35e2081685e389a665f2c74d7e077cb93cecabaea352da4752ec"
             ],
             "version": "==0.4.1"
+        },
+        "flask-s3": {
+            "hashes": [
+                "sha256:d6e1fc3834f0be74c17e26bb8d0f506f711eb888775ab6af9164c0abb6f4c97c",
+                "sha256:23cbbb1db4c29c313455dbe16f25be078d6318f0a11abcbb610f99e116945b62",
+                "sha256:1d49061d4b78759df763358a901f4ed32bb43f672c9f8e1ec7226793f6ae0fd2"
+            ],
+            "version": "==0.3.3"
         },
         "flask-wtf": {
             "hashes": [
@@ -304,6 +318,12 @@
                 "sha256:cc44da8e1145637334317feebd728bd869a35285b93cbb4cca2577da7e62db4f"
             ],
             "version": "==1.22"
+        },
+        "webassets": {
+            "hashes": [
+                "sha256:e7d9c8887343123fd5b32309b33167428cb1318cdda97ece12d0907fd69d38db"
+            ],
+            "version": "==0.12.1"
         },
         "werkzeug": {
             "hashes": [

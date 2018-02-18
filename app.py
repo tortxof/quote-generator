@@ -17,6 +17,8 @@ from flask_login import (
     logout_user,
     login_required,
 )
+from flask_s3 import FlaskS3
+from flask_assets import Environment, Bundle
 
 from models import (
     db,
@@ -40,6 +42,22 @@ from forms import (
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'DEBUGSECRETKEY'
+app.config['FLASKS3_CDN_DOMAIN'] = os.environ.get('FLASKS3_CDN_DOMAIN')
+app.config['FLASKS3_BUCKET_NAME'] = os.environ.get('FLASKS3_BUCKET_NAME')
+app.config['FLASKS3_HEADERS'] = {'Cache-Control': 'max-age=31536000'}
+app.config['FLASKS3_GZIP'] = True
+app.config['FLASK_ASSETS_USE_S3'] = True
+
+if os.environ.get('FLASK_DEBUG'):
+    app.config['ASSETS_DEBUG'] = True
+    app.config['FLASK_ASSETS_USE_S3'] = False
+
+s3 = FlaskS3(app)
+assets = Environment(app)
+assets.register(
+    'css_all',
+    Bundle('main.css', output='main.%(version)s.css'),
+)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
