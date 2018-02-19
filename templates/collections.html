@@ -3,7 +3,7 @@
 {% include 'form_errors.html' %}
 <form action="{{ url_for('collections') }}" method="post">
   {{ form.hidden_tag() }}
-  <div>
+  <div class="form-fields">
     {{ form.name.label }}
     {{ form.name(autofocus=True) }}
   </div>

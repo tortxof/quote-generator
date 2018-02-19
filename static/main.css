@@ -53,20 +53,17 @@ footer {
   margin-top: 4rem;
 }
 
-form > div {
-  display: flex;
-  flex-direction: row;
-  margin: 0.5rem 1rem;
+.form-fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-row-gap: 1rem;
 }
 
-form > div > label {
-  margin-right: 0.5rem;
-}
-
-form > div > input,
-form > div > textarea,
-form > div > select {
-  flex-grow: 1;
+@media (min-width: 640px) {
+  .form-fields {
+    grid-template-columns: 1fr 3fr;
+  }
 }
 
 form button {

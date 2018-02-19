@@ -3,19 +3,13 @@
 {% include 'form_errors.html' %}
 <form action="{{ url_for('quote', quote_id=form.id.data) }}" method="post">
   {{ form.hidden_tag() }}
-  <div>
+  <div class="form-fields">
     {{ form.content.label }}
     {{ form.content(autofocus=True, rows=8) }}
-  </div>
-  <div>
     {{ form.author.label }}
     {{ form.author }}
-  </div>
-  <div>
     {{ form.collections.label }}
     {{ form.collections }}
-  </div>
-  <div>
     {{ form.form_delete.label }}
     {{ form.form_delete }}
   </div>
