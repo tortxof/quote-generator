@@ -29,6 +29,18 @@ class LoginForm(FlaskForm):
         [InputRequired(), Length(min=8, max=1024)],
     )
 
+class ForgotPasswordForm(FlaskForm):
+    email = StringField(
+        'Email',
+        [InputRequired(), Length(max=255), Email()],
+    )
+
+class ChangePasswordForm(FlaskForm):
+    password = PasswordField(
+        'Password',
+        [InputRequired(), Length(min=8, max=1024)],
+    )
+
 class QuoteAddForm(FlaskForm):
     content = TextAreaField('Quote', [InputRequired(), Length(max=4096)])
     author = StringField('Author', [Length(max=255)])

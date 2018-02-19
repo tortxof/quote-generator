@@ -1,5 +1,8 @@
 import os
+import time
 
+import requests
+from itsdangerous import URLSafeSerializer, BadSignature
 from flask import (
     Flask,
     render_template,
@@ -33,6 +36,8 @@ from playhouse.shortcuts import model_to_dict
 from forms import (
     SignupForm,
     LoginForm,
+    ForgotPasswordForm,
+    ChangePasswordForm,
     QuoteAddForm,
     QuoteEditForm,
     CollectionAddForm,
@@ -43,6 +48,8 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'DEBUGSECRETKEY'
 app.config['APP_URL'] = os.environ.get('APP_URL')
+app.config['MAILGUN_DOMAIN'] = os.environ.get('MAILGUN_DOMAIN')
+app.config['MAILGUN_KEY'] = os.environ.get('MAILGUN_KEY')
 app.config['FLASKS3_CDN_DOMAIN'] = os.environ.get('FLASKS3_CDN_DOMAIN')
 app.config['FLASKS3_BUCKET_NAME'] = os.environ.get('FLASKS3_BUCKET_NAME')
 app.config['FLASKS3_HEADERS'] = {'Cache-Control': 'max-age=31536000'}
@@ -83,6 +90,24 @@ def _db_close(exc):
 
 cors_header = {'Access-Control-Allow-Origin': '*'}
 
+def send_recovery_email(email):
+    s = URLSafeSerializer(app.config['SECRET_KEY'])
+    token = s.dumps({
+        'time': int(time.time()),
+        'email': email,
+    })
+    email_data = {
+        'from': f"Quote Generator <noreply@{app.config['MAILGUN_DOMAIN']}>",
+        'to': email,
+        'subject': 'Quote Generator Password Recovery',
+        'html': render_template('forgot_email.html', token=token),
+    }
+    mailgun_response = requests.post(
+        f"https://api.mailgun.net/v3/{app.config['MAILGUN_DOMAIN']}/messages",
+        auth = ('api', app.config['MAILGUN_KEY']),
+        data = email_data,
+    )
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -122,6 +147,51 @@ def login():
             return redirect(url_for('login'))
     else:
         return render_template('login.html', form=form)
+
+@app.route('/forgot', methods=['GET', 'POST'])
+def forgot():
+    form = ForgotPasswordForm()
+    if form.validate_on_submit():
+        try:
+            user = User.get(User.email == form.email.data)
+        except User.DoesNotExist:
+            flash('No account with that email was found.')
+            return redirect(url_for('forgot'))
+        send_recovery_email(form.email.data)
+        flash('A recovery link will be sent to your email.')
+        return redirect(url_for('index'))
+    else:
+        return render_template('forgot.html', form=form)
+
+@app.route('/recover-password/<token>', methods=['GET', 'POST'])
+def recover_password(token):
+    s = URLSafeSerializer(app.config['SECRET_KEY'])
+    try:
+        token_data = s.loads(token)
+    except BadSignature:
+        flash('Failed to validate token.')
+        return redirect(url_for('index'))
+    if token_data['time'] + 600 < int(time.time()):
+        flash('That link has expired')
+        return redirect(url_for('forgot'))
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        try:
+            user = User.get(User.email == token_data['email'])
+        except User.DoesNotExist:
+            flash('That user does not exist.')
+            return redirect(url_for('index'))
+        user.password = generate_password_hash(form.password.data)
+        user.save()
+        flash('Your password has been updated.')
+        return redirect(url_for('login'))
+    else:
+        return render_template(
+            'recover_password.html',
+            form = form,
+            token_data = token_data,
+            token = token,
+        )
 
 @app.route('/logout')
 @login_required

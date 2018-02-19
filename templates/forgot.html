@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1>Forgot Password</h1>
+{% include 'form_errors.html' %}
+<form action="{{ url_for('forgot') }}" method="post">
+  {{ form.hidden_tag() }}
+  <div class="form-fields">
+    {{ form.email.label }}
+    {{ form.email(autofocus=True) }}
+  </div>
+  <button type="submit">Send Recovery Link</button>
+</form>
+{% endblock %}
