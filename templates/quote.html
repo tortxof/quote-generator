@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
+<h2>Quote: {{ form.id.data }}</h2>
 {% include 'form_errors.html' %}
 <form action="{{ url_for('quote', quote_id=form.id.data) }}" method="post">
   {{ form.hidden_tag() }}
