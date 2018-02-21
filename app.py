@@ -23,6 +23,7 @@ from flask_login import (
 from flask_s3 import FlaskS3
 from flask_assets import Environment, Bundle
 from playhouse.shortcuts import model_to_dict
+from zappa.async import task
 
 from models import (
     db,
@@ -90,6 +91,14 @@ def _db_close(exc):
 
 cors_header = {'Access-Control-Allow-Origin': '*'}
 
+@task
+def send_email(domain, key, data):
+    requests.post(
+        f"https://api.mailgun.net/v3/{domain}/messages",
+        auth = ('api', key),
+        data = data,
+    )
+
 def send_recovery_email(email):
     s = URLSafeSerializer(app.config['SECRET_KEY'])
     token = s.dumps({
@@ -102,9 +111,9 @@ def send_recovery_email(email):
         'subject': 'Quote Generator Password Recovery',
         'html': render_template('forgot_email.html', token=token),
     }
-    mailgun_response = requests.post(
-        f"https://api.mailgun.net/v3/{app.config['MAILGUN_DOMAIN']}/messages",
-        auth = ('api', app.config['MAILGUN_KEY']),
+    send_email(
+        domain = app.config['MAILGUN_DOMAIN'],
+        key = app.config['MAILGUN_KEY'],
         data = email_data,
     )
 
