@@ -22,6 +22,7 @@ from flask_login import (
 )
 from flask_s3 import FlaskS3
 from flask_assets import Environment, Bundle
+from playhouse.shortcuts import model_to_dict
 
 from models import (
     db,
@@ -32,7 +33,6 @@ from models import (
     IntegrityError,
     fn,
 )
-from playhouse.shortcuts import model_to_dict
 from forms import (
     SignupForm,
     LoginForm,
