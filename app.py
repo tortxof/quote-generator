@@ -379,11 +379,23 @@ def collection_json(collection_name):
 
 @app.route('/api/collection/<collection_name>/random')
 def collection_random_json(collection_name):
-    collection = Collection.get(Collection.name == collection_name)
+    try:
+        quote = (
+            Quote.select()
+            .join(QuoteCollection)
+            .join(Collection)
+            .where(
+                Collection.name == collection_name,
+            )
+            .order_by(fn.Random())
+            .get()
+        )
+    except Quote.DoesNotExist:
+        return jsonify(
+            {'message': 'There are no quotes in that collection.'}
+        ), 404, cors_header
     return jsonify(model_to_dict(
-        Quote.select().join(QuoteCollection).where(
-            QuoteCollection.collection == collection,
-        ).order_by(fn.Random()).limit(1)[0],
+        quote,
         recurse = False,
         exclude = [Quote.user],
     )), cors_header
