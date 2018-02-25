@@ -411,7 +411,7 @@ def quote_json(quote_id):
     try:
         quote = Quote.get(Quote.id == quote_id)
     except Quote.DoesNotExist:
-        return jsonify({'message': 'Quote not found.'}), 404
+        return jsonify({'message': 'Quote not found.'}), 404, cors_header
     return jsonify(model_to_dict(
         quote,
         recurse=False,
