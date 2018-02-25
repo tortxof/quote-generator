@@ -366,16 +366,22 @@ def collection(collection_name):
 
 @app.route('/api/collection/<collection_name>')
 def collection_json(collection_name):
-    collection = Collection.get(Collection.name == collection_name)
-    return jsonify({'quotes': list(
+    try:
+        collection = Collection.get(Collection.name == collection_name)
+    except Collection.DoesNotExist:
+        return jsonify({'message': 'Collection not found.'}), 404, cors_header
+    quotes = (
         Quote.select(
             Quote.content,
             Quote.author,
             Quote.id,
-        ).join(QuoteCollection).where(
+        )
+        .join(QuoteCollection)
+        .where(
             QuoteCollection.collection == collection,
-        ).dicts()
-    )}), cors_header
+        )
+    )
+    return jsonify({'quotes': list(quotes.dicts())}), cors_header
 
 @app.route('/api/collection/<collection_name>/random')
 def collection_random_json(collection_name):
