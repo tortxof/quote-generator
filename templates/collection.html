@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h2>Collection: {{ collection_name }}</h2>
+<h2>Collection: {{ collection.name }}</h2>
 {% include 'form_errors.html' %}
-<form action="{{ url_for('collection', collection_name=collection_name) }}" method="post">
+<form action="{{ url_for('collection', collection_name=collection.name) }}" method="post">
   {{ form.hidden_tag() }}
   <div class="form-fields">
     {{ form.name.label }}
@@ -12,4 +12,12 @@
   </div>
   <button type="submit">Save Changes</button>
 </form>
+<div class="quotes">
+  {% for quotecollection in collection.quotecollection_set %}
+  <div class="quote">
+    <div class="content"><a href="{{ url_for('quote', quote_id=quotecollection.quote.id) }}">{{ quotecollection.quote.content }}</a></div>
+    <div class="author">{{ quotecollection.quote.author }}</div>
+  </div>
+  {% endfor %}
+</div>
 {% endblock %}

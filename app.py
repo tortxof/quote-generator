@@ -330,9 +330,15 @@ def collections():
 @login_required
 def collection(collection_name):
     try:
-        collection = Collection.get(
-            Collection.name == collection_name,
-            Collection.user == current_user.get_id(),
+        collection = (
+            Collection.select(Collection, Quote)
+            .join(QuoteCollection, JOIN.LEFT_OUTER)
+            .join(Quote, JOIN.LEFT_OUTER)
+            .where(
+                Collection.name == collection_name,
+                Collection.user == current_user.get_id(),
+            )
+            .get()
         )
     except Collection.DoesNotExist:
         flash('Collection not found')
@@ -355,7 +361,7 @@ def collection(collection_name):
         return render_template(
             'collection.html',
             form = form,
-            collection_name = collection_name,
+            collection = collection,
         )
 
 @app.route('/api/collection/<collection_name>')
