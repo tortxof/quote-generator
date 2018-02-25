@@ -33,6 +33,7 @@ from models import (
     QuoteCollection,
     IntegrityError,
     fn,
+    JOIN,
 )
 from forms import (
     SignupForm,
@@ -308,13 +309,21 @@ def collections():
                 flash('A collection with that name already exists.')
         return redirect(url_for('collections'))
     else:
-        collections = Collection.select().where(
-            Collection.user == current_user.get_id(),
+        collections = (
+            Collection.select(
+                Collection,
+                fn.COUNT(QuoteCollection.id).alias('quote_count'),
+            )
+            .join(QuoteCollection, JOIN.LEFT_OUTER)
+            .group_by(Collection)
+            .where(
+                Collection.user == current_user.get_id(),
+            )
         )
         return render_template(
             'collections.html',
-            form=form,
-            collections=collections,
+            form = form,
+            collections = collections,
         )
 
 @app.route('/collection/<collection_name>', methods=['GET', 'POST'])
